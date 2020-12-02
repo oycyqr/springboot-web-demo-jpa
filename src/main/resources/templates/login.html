@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http//www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<body>
+<h1>登录</h1>
+<form method="post" th:action="@{/login}">
+    <div>
+        用户名：<input type="text" name="username">
+    </div>
+    <div>
+        密码：<input type="password" name="password">
+    </div>
+    <div id="error-div" style="display: none;color: red;">
+        <span id="error-msg"></span>
+    </div>
+    <div>
+        <button type="button" id="login-button">立即登录</button>
+    </div>
+</form>
+</body>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    var ctx = [[@{/}]];
+        $(function () {
+            $("#login-button").on("click", function () {
+                login();
+            })
+
+        });
+
+    function login() {
+        var account = $("input[name='username']").val().trim();
+        var password = $("input[name='password']").val().trim();
+        $.ajax({
+            type: "post",
+            url: ctx + "login",
+            data: {
+                "account": account,
+                "password": password
+            },
+            success: function (result) {
+                console.log(result);
+                if (result == "login success") {
+                    location.href = ctx + 'index';
+                }
+                $("#error-div").show();
+                $("#error-msg").html(result);
+            },
+            error: function (result) {
+                console.log(result);
+            }
+        });
+    }
+
+</script>
+</html>
